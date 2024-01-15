@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/polishchuk_yevhenii_viso_front-end_task/static/css/main.7d1f2791.css",
+    "main.js": "/polishchuk_yevhenii_viso_front-end_task/static/js/main.335ee66f.js",
+    "static/js/787.d4aba7ab.chunk.js": "/polishchuk_yevhenii_viso_front-end_task/static/js/787.d4aba7ab.chunk.js",
+    "index.html": "/polishchuk_yevhenii_viso_front-end_task/index.html",
+    "main.7d1f2791.css.map": "/polishchuk_yevhenii_viso_front-end_task/static/css/main.7d1f2791.css.map",
+    "main.335ee66f.js.map": "/polishchuk_yevhenii_viso_front-end_task/static/js/main.335ee66f.js.map",
+    "787.d4aba7ab.chunk.js.map": "/polishchuk_yevhenii_viso_front-end_task/static/js/787.d4aba7ab.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7d1f2791.css",
+    "static/js/main.335ee66f.js"
+  ]
+}
