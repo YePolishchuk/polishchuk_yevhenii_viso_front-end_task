@@ -1,22 +1,24 @@
-import { collection, getDocs, query } from "firebase/firestore/lite";
+import { collection, getDocs } from "firebase/firestore/lite";
 import { db } from "./Components/Firebase/Firebase";
 
 export const fetchMarkersFromFirestore = async () => {
+  const markersCollection = collection(db, 'markers');
+
   try {
-    const markersCollection = collection(db, 'markers');
+    const querySnapshot = await getDocs(markersCollection);
 
-    const q = query(markersCollection);
+    const markersData = querySnapshot.docs.map((doc) => {
+      const data = doc.data();
+      return {
+        id: parseInt(doc.id, 10),
+        lat: data.location.lat,
+        lng: data.location.lng,
+      };
+    });
 
-    const querySnapshot = await getDocs(q);
-
-    const markersData = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    console.log('Markers from Firestore:', markersData);
-
+    return markersData;
   } catch (error) {
-    console.error('Error fetching markers from Firestore:', error);
+    console.error('Error fetching markers:', error);
+    return [];
   }
 };

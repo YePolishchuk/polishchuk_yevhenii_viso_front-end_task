@@ -2,13 +2,13 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore/lite';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAObn5eK4ZOq-KiI11TYRxfMf8a6MmSsvg",
-  authDomain: "viso-front-end-task-230e8.firebaseapp.com",
-  projectId: "viso-front-end-task-230e8",
-  storageBucket: "viso-front-end-task-230e8.appspot.com",
-  messagingSenderId: "512754960243",
-  appId: "1:512754960243:web:ec7640c4a854166e296706",
-  measurementId: "G-DJ9D79EE1N"
+  apiKey: "AIzaSyDbmQzRljiONBb5AhbyqO2V7woJ1AgBHjs",
+  authDomain: "viso-task.firebaseapp.com",
+  projectId: "viso-task",
+  storageBucket: "viso-task.appspot.com",
+  messagingSenderId: "339948300392",
+  appId: "1:339948300392:web:aa7f5dd8f5ef429a8f33dd",
+  measurementId: "G-EN828PZ8PC"
 };
 
 const app = initializeApp(firebaseConfig);
