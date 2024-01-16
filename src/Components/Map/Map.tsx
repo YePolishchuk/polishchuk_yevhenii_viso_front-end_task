@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import './Map.scss';
 import { db } from '../Firebase/Firebase';
-import { Timestamp, doc, setDoc } from 'firebase/firestore/lite';
-// import { fetchMarkersFromFirestore } from '../../fetchData';
+import { Timestamp, deleteDoc, doc, setDoc } from 'firebase/firestore/lite';
+import { fetchMarkersFromFirestore } from '../../fetchData';
 
 interface Markers {
   id: number
@@ -28,14 +28,14 @@ export const Map: React.FC = () => {
   const [markers, setMarkers] = useState<Markers[]>([]);
   const [selectedMarkerId, setSelectedMarkerId] = useState<number | null>(null);
 
-  // useEffect(() => {
-  //   // Fetch markers from Firestore when the component mounts
-  //   fetchMarkersFromFirestore().then((fetchedMarkers) => {
-  //     console.log(fetchedMarkers);
-  //     //@ts-ignore
-  //     setMarkers(fetchedMarkers);
-  //   });
-  // }, []);
+  useEffect(() => {
+    // Fetch markers from Firestore when the component mounts
+    fetchMarkersFromFirestore().then((fetchedMarkers) => {
+      console.log(fetchedMarkers);
+      //@ts-ignore
+      setMarkers(fetchedMarkers);
+    });
+  }, []);
 
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: API_KEY,
@@ -50,12 +50,6 @@ export const Map: React.FC = () => {
   if (!isLoaded) {
     return <div>Loading maps</div>;
   }
-
-  // if (!Array.isArray(markers) || markers.length === 0) {
-  //   return <div>No markers available</div>;
-  // }
-
-  // const locations = collection(db, 'markers');
 
   const onMapClick = async (event: google.maps.MapMouseEvent) => {
     const newMarker = {
@@ -72,7 +66,6 @@ export const Map: React.FC = () => {
         location: newMarker,
         timestamp: Timestamp.now(),
       });
-      console.log('Marker added with ID: ');
     } catch (error) {
       console.error('Error adding marker: ', error);
     }
@@ -92,15 +85,37 @@ export const Map: React.FC = () => {
     setMarkers(newMarkers);
   };
 
-  const handleDeleteMarker = (id: number) => {
-    const updatedMarkers = markers.filter((marker) => marker.id !== id);
-    setMarkers(updatedMarkers);
-    setSelectedMarkerId(null);
+  const handleDeleteMarker = async (id: number) => {
+    try {
+      const markerDocRef = doc(db, 'markers', id.toString());
+      await deleteDoc(markerDocRef);
+  
+      const updatedMarkers = markers.filter((marker) => marker.id !== id);
+      setMarkers(updatedMarkers);
+      setSelectedMarkerId(null);
+    } catch(error) { 
+      console.error('Error deleting marker: ', error);
+    }
+    
   };
 
-  const handleDeleteAllMarkers = () => {
-    setMarkers([]);
-    setSelectedMarkerId(null);
+  const handleDeleteAllMarkers = async () => {
+    try {
+      // Delete all marker documents from Firestore
+      const batch: any[] = [];
+      markers.forEach((marker) => {
+        const markerDocRef = doc(db, 'markers', marker.id.toString());
+        console.log(markerDocRef)
+        batch.push(deleteDoc(markerDocRef));
+      });
+      await Promise.all(batch);
+  
+      // Update the local state to remove all markers
+      setMarkers([]);
+      setSelectedMarkerId(null);
+    } catch (error) {
+      console.error('Error deleting all markers: ', error);
+    }
   };
 
   return (
