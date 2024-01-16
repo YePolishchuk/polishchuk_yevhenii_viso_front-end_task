@@ -29,7 +29,6 @@ export const Map: React.FC = () => {
   const [selectedMarkerId, setSelectedMarkerId] = useState<number | null>(null);
 
   useEffect(() => {
-    // Fetch markers from Firestore when the component mounts
     fetchMarkersFromFirestore().then((fetchedMarkers) => {
       console.log(fetchedMarkers);
       //@ts-ignore
@@ -101,7 +100,6 @@ export const Map: React.FC = () => {
 
   const handleDeleteAllMarkers = async () => {
     try {
-      // Delete all marker documents from Firestore
       const batch: any[] = [];
       markers.forEach((marker) => {
         const markerDocRef = doc(db, 'markers', marker.id.toString());
@@ -110,7 +108,6 @@ export const Map: React.FC = () => {
       });
       await Promise.all(batch);
   
-      // Update the local state to remove all markers
       setMarkers([]);
       setSelectedMarkerId(null);
     } catch (error) {
